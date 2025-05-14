@@ -18,6 +18,9 @@ class PrayerTimesScreen extends StatefulWidget {
 
 class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   String nextPrayerTimeName = '';
+  final CountDownController _controller = CountDownController();
+  Duration countdownDuration = Duration.zero;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = ScreenUtils.getScreenHeight(context);
@@ -34,9 +37,19 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
           child: BlocBuilder<PrayerTimeCubit, AppState>(
             builder: (context, state) {
               if (state is SuccessState) {
-                Duration countdownDuration = getNextPrayerDuration(
+                // نحسب اسم ووقت الصلاة الجاية
+                final result = getNextPrayerDurationAndName(
                   state.times['timings'],
                 );
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      nextPrayerTimeName = result['name'];
+                      countdownDuration = result['duration'];
+                    });
+                    _controller.restart(duration: countdownDuration.inSeconds);
+                  }
+                });
                 return ListView(
                   children: [
                     SizedBox(height: screenHeight * 0.1),
@@ -56,7 +69,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                                 color: Colors.orange,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
                               'الصلاة القادمة: $nextPrayerTimeName',
                               style: const TextStyle(
@@ -67,15 +80,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                             ),
                           ],
                         ),
-                        //Use CountdownTimer
                         Column(
                           children: [
                             CircularCountDownTimer(
+                              controller: _controller,
                               width: screenWidth * 0.40,
                               height: screenHeight * 0.33,
-                              duration:
-                                  countdownDuration
-                                      .inSeconds, // Convert to seconds
+                              duration: countdownDuration.inSeconds,
                               ringColor: Colors.white,
                               fillColor: const Color(0xFFb7935f),
                               textStyle: const TextStyle(
@@ -185,7 +196,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     );
   }
 
-  Duration getNextPrayerDuration(Map<String, dynamic> timings) {
+  Map<String, dynamic> getNextPrayerDurationAndName(
+    Map<String, dynamic> timings,
+  ) {
     DateTime now = DateTime.now();
     List<Map<String, String>> prayers = [
       {'name': 'الفجر', 'key': 'Fajr'},
@@ -210,12 +223,14 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       );
 
       if (prayerTime.isAfter(now)) {
-        nextPrayerTimeName = prayer['name']!;
-        return prayerTime.difference(now);
+        return {
+          'name': prayer['name']!,
+          'duration': prayerTime.difference(now),
+        };
       }
     }
 
-    // لو مفيش صلاة جاية النهارده نحسب الفجر بتاع بكرة
+    // صلاة الفجر لبكرا
     String fajr = _cleanTime(timings['Fajr']);
     List<String> parts = fajr.split(':');
     int hour = int.parse(parts[0]);
@@ -229,8 +244,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       minute,
     );
 
-    nextPrayerTimeName = 'الفجر';
-    return tomorrowFajr.difference(now);
+    return {'name': 'الفجر', 'duration': tomorrowFajr.difference(now)};
   }
 
   String _cleanTime(String time) {
