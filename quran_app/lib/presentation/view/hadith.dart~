@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quran_app/core/assets/app_images.dart';
-import 'package:quran_app/core/custom_widgets/quran_item.dart';
+import 'package:quran_app/core/custom_widgets/hadith_item.dart';
 import 'package:quran_app/core/extensions/extension.dart';
 import 'package:quran_app/core/utils/myConstants.dart';
-import 'package:quran_app/manager/cubit/quran_cubit.dart';
-import 'package:quran_app/manager/state/quran_state.dart';
+import 'package:quran_app/manager/cubit/hadith_cubit.dart';
+import 'package:quran_app/manager/state/hadith_state.dart';
 
-class QuranScreen extends StatelessWidget {
-  const QuranScreen({super.key});
-  static const String routeName = 'Quran Screen';
+class HadithScreen extends StatelessWidget {
+  const HadithScreen({super.key});
+  static const String routeName = 'Hadeth Screen';
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuranCubit, QuranState>(
+    return BlocBuilder<HadithCubit, HadithState>(
       builder: (context, state) {
         if (state is SuccessState) {
           return CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * .05,
-                ),
-              ),
+               SliverToBoxAdapter(child: SizedBox(height:MediaQuery.of(context).size.height*.05),),
               SliverList.separated(
                 itemBuilder:
-                    (c, index) => QuranItem(
-                      number: '${state.quran[index]['number']}',
-                      arName: '${state.quran[index]['name']}',
-                      enName: '${state.quran[index]['englishName']}',
-                      numberOfAya: '${state.quran[index]['numberOfAyahs']}',
+                    (c, index) => HadithItem(
+                      hadithText: "${state.hadiths[index]['hadithArabic']}",
+                      hadithAuthor:
+                          "${state.hadiths[index]['book']['writerName']}",
+                      hadithChapter:
+                          "${state.hadiths[index]['book']['writerDeath']}",
                     ),
                 separatorBuilder: (c, index) => const SizedBox(height: 15),
-                itemCount: state.quran.length,
+                itemCount: state.hadiths.length,
               ),
             ],
           );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quran_app/core/assets/app_images.dart';
 import 'package:quran_app/core/custom_widgets/prayer_time_item.dart';
+import 'package:quran_app/core/extensions/extension.dart';
 import 'package:quran_app/core/models/prayer_time_model.dart';
 import 'package:quran_app/core/utils/myConstants.dart';
 import 'package:quran_app/manager/cubit/prayer_time_cubit.dart';
@@ -22,166 +23,139 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
   Widget build(BuildContext context) {
     double screenHeight = ScreenUtils.getScreenHeight(context);
     double screenWidth = ScreenUtils.getScreenWidth(context);
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppImages.backgroundLight),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: BlocBuilder<PrayerTimeCubit, AppState>(
-            builder: (context, state) {
-              if (state is SuccessState) {
-                Duration countdownDuration = getNextPrayerDuration(
-                  state.times['timings'],
-                );
-                return ListView(
-                  children: [
-                    SizedBox(height: screenHeight * 0.1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              '${state.times['date']['hijri']['month']['ar']}',
-                              style: const TextStyle(fontSize: 25),
-                            ),
-                            Text(
-                              '${state.times['date']['hijri']['date']}',
-                              style: const TextStyle(
-                                fontSize: 25,
-                                color: Colors.orange,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              'الصلاة القادمة: $nextPrayerTimeName',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ],
-                        ),
-                        //Use CountdownTimer
-                        Column(
-                          children: [
-                            CircularCountDownTimer(
-                              width: screenWidth * 0.40,
-                              height: screenHeight * 0.33,
-                              duration:
-                                  countdownDuration
-                                      .inSeconds, // Convert to seconds
-                              ringColor: Colors.white,
-                              fillColor: const Color(0xFFb7935f),
-                              textStyle: const TextStyle(
-                                fontSize: 28.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textFormat: CountdownTextFormat.HH_MM_SS,
-                              strokeWidth: 8.0,
-                              strokeCap: StrokeCap.round,
-                              isReverse: false,
-                              isReverseAnimation: false,
-                              isTimerTextShown: true,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: screenHeight * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.fogImage,
-                              prayerName: 'الفجر',
-                              prayerTime: '${state.times['timings']['Fajr']}',
-                            ),
-                          ),
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.sunsetImage,
-                              prayerName: 'الشروق',
-                              prayerTime:
-                                  '${state.times['timings']['Sunrise']}',
-                            ),
-                          ),
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.sunImage,
-                              prayerName: 'الظهر',
-                              prayerTime: '${state.times['timings']['Dhuhr']}',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.cloudImage,
-                              prayerName: 'العصر',
-                              prayerTime: '${state.times['timings']['Sunset']}',
-                            ),
-                          ),
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.sunriseImage,
-                              prayerName: 'المغرب',
-                              prayerTime:
-                                  '${state.times['timings']['Maghrib']}',
-                            ),
-                          ),
-                          PrayerTimeItem(
-                            prayerTimeModel: PrayerTimeModel(
-                              imageName: AppImages.moonImage,
-                              prayerName: 'العشاء',
-                              prayerTime: '${state.times['timings']['Isha']}',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              } else if (state is ErrorState) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 20,
-                  children: [
-                    Center(child: Text('Error -> ${state.errorMessage}')),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 20,
+    return BlocBuilder<PrayerTimeCubit, AppState>(
+      builder: (context, state) {
+        if (state is SuccessState) {
+          Duration countdownDuration = getNextPrayerDuration(
+            state.times['timings'],
+          );
+          return ListView(
+            children: [
+              SizedBox(height: screenHeight * 0.1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
                     children: [
-                      CircularProgressIndicator(),
-                      Text('Loading Prayer Times...'),
+                      Text(
+                        '${state.times['date']['hijri']['month']['ar']}',
+                        style: const TextStyle(fontSize: 25),
+                      ),
+                      Text(
+                        '${state.times['date']['hijri']['date']}',
+                        style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.orange,
+                        ),
+                      ),
                     ],
                   ),
-                );
-              }
-            },
-          ),
-        ),
-      ),
+                  //Use CountdownTimer
+                  Column(
+                    children: [
+                      CircularCountDownTimer(
+                        width: screenWidth * 0.40,
+                        height: screenHeight * 0.33,
+                        duration:
+                            countdownDuration.inSeconds, // Convert to seconds
+                        ringColor: Colors.white,
+                        fillColor: const Color(0xFFb7935f),
+                        textStyle: const TextStyle(
+                          fontSize: 28.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textFormat: CountdownTextFormat.HH_MM_SS,
+                        strokeWidth: 8.0,
+                        strokeCap: StrokeCap.round,
+                        isReverse: false,
+                        isReverseAnimation: false,
+                        isTimerTextShown: true,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: screenHeight * 0.04),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.fogImage,
+                        prayerName: context.alFajr,
+                        prayerTime: '${state.times['timings']['Fajr']}',
+                      ),
+                    ),
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.sunsetImage,
+                        prayerName: context.alShorouq,
+                        prayerTime: '${state.times['timings']['Sunrise']}',
+                      ),
+                    ),
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.sunImage,
+                        prayerName: context.alDhuhr,
+                        prayerTime: '${state.times['timings']['Dhuhr']}',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.cloudImage,
+                        prayerName: context.alAsr,
+                        prayerTime: '${state.times['timings']['Sunset']}',
+                      ),
+                    ),
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.sunriseImage,
+                        prayerName: context.alMaghrib,
+                        prayerTime: '${state.times['timings']['Maghrib']}',
+                      ),
+                    ),
+                    PrayerTimeItem(
+                      prayerTimeModel: PrayerTimeModel(
+                        imageName: AppImages.moonImage,
+                        prayerName: context.alIsha,
+                        prayerTime: '${state.times['timings']['Isha']}',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        } else if (state is ErrorState) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 20,
+            children: [
+              Center(child: Text('${context.error} -> ${state.errorMessage}')),
+            ],
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 20,
+              children: [CircularProgressIndicator(), Text(context.loading)],
+            ),
+          );
+        }
+      },
     );
   }
 

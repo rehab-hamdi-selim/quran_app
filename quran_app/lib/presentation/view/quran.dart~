@@ -18,11 +18,7 @@ class QuranScreen extends StatelessWidget {
         if (state is SuccessState) {
           return CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * .05,
-                ),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 15)),
               SliverList.separated(
                 itemBuilder:
                     (c, index) => QuranItem(

@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:quran_app/core/extensions/extension.dart';
 import 'package:quran_app/core/utils/myConstants.dart' show MyColors;
 import 'package:quran_app/presentation/view/surah.dart';
 
@@ -60,8 +62,8 @@ class QuranItem extends StatelessWidget {
                   child: Column(
                     spacing: 10,
                     children: [
-                      const Text(
-                        'عدد ألايات',
+                       Text(
+                        context.numberOfAyahs,
                         style: TextStyle(
                           color: MyColors.appColor,
                           fontSize: 19,

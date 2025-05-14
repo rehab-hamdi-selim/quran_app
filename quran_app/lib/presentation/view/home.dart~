@@ -31,8 +31,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> titles = [
+      context.prayerTimes,
+      context.quran,
+      context.hadeth,
+      context.sepha,
+      context.settings,
+    ];
     return SafeArea(
       child: Scaffold(
+        // appBar: AppBar(
+        //   title: Text(
+        //     titles[currentScreen],
+        //     style: TextStyle(color:  Color(0xFFb7935f),fontWeight: FontWeight.bold, fontSize: 25),
+        //   ),
+        //   backgroundColor:Colors.transparent,
+        //   elevation: 0,
+        //   centerTitle: true,
+        // ),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
