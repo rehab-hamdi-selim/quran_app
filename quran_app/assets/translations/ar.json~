@@ -1,0 +1,22 @@
+{
+  "Al-Fajr": "الفجر",
+  "Al-Dhuhr": "الظهر",
+  "Al-Ashr": "العصر",
+  "Al-Maghrib": "المغرب",
+  "Al-Isha": "العشاء",
+  "Prayer Times": "اوقات الصلاة",
+  "Quran": "القران",
+  "Hadeth": "الاحاديث",
+  "Sepha": "السبحه",
+  "Settings": "الأعدادات",
+  "loading": "جاري التحميل",
+  "error": "حدث خطأ",
+  "numberOfAyahs": "عدد الايات",
+  "numberOfTasbeeh": "عدد التسبيحات",
+  "language": "اللغة",
+  "Name": "الاسم",
+  "Email": "البريد الالكتروني",
+  "Password": "كلمة المرور",
+  "Confirm Password": "تاكيد كلمة المرور",
+  "Logout": "تسجيل الخروج"
+}
