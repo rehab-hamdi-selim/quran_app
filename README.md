@@ -21,10 +21,8 @@ A powerful and beautifully designed Flutter app for exploring Islamic content. T
 - ⚙️ Settings Page (language switcher, theme toggle, etc.)
 
 ## 📷 Screenshots
-- ![Splash Screen](https://github.com/user-attachments/assets/cf19b78f-6a81-4018-92ff-34874c688bf8)
-- ![Prayer Times](https://github.com/user-attachments/assets/9e7410a1-c293-47d1-9d9b-59807994b6b4)
-- ![Quran Surahs](https://github.com/user-attachments/assets/1b73f744-7691-4f87-a1ac-a3fddcde0d19)
-- ![Quran Surah](https://github.com/user-attachments/assets/9d29a513-119c-42f6-bf86-46979aef8bb2)
+- ![Splash Screen](https://github.com/user-attachments/assets/cf19b78f-6a81-4018-92ff-34874c688bf8)- ![Prayer Times](https://github.com/user-attachments/assets/9e7410a1-c293-47d1-9d9b-59807994b6b4)
+- ![Quran Surahs](https://github.com/user-attachments/assets/1b73f744-7691-4f87-a1ac-a3fddcde0d19)- ![Quran Surah](https://github.com/user-attachments/assets/9d29a513-119c-42f6-bf86-46979aef8bb2)
 - ![Hadith](https://github.com/user-attachments/assets/2b410261-71c1-428d-9672-41987f319ff3)
 - ![Tasbeeh](https://github.com/user-attachments/assets/b74a88d6-badd-448a-a67e-8b6c227ff84b)
 
